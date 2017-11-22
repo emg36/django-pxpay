@@ -84,7 +84,7 @@ class Transaction(models.Model):
 
     def _generate_unique_txnid(self):
         TxnId = str(uuid4())[:15].replace('-', '')
-        while self._base_manager.filter(TxnId=TxnId).exists():
+        while self.__class__.objects.filter(TxnId=TxnId).exists():
             TxnId = str(uuid4())[:15].replace('-', '')
         return TxnId
 
