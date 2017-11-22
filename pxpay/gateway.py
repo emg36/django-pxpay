@@ -32,9 +32,9 @@ class Request(object):
         txn.save()
         self.data = {}
         self.set_auth(userid, passkey)
-        for element in txn._meta.get_all_field_names():
-            if element in self.REQUEST_FILEDS:
-                self.set_element(element, getattr(txn, element, None))
+        for element in txn._meta.get_fields():
+            if element.name in self.REQUEST_FILEDS:
+                self.set_element(element.name, getattr(txn, element.name, None))
         for element in kwargs:
             if element in self.REQUEST_FILEDS:
                 self.set_element(element, kwargs[element])
@@ -151,7 +151,8 @@ class Gateway(object):
     """
 
     def __init__(self, **kwargs):
-        self.pxpay_url = 'https://sec2.paymentexpress.com/pxpay/pxaccess.aspx'
+        self.pxpay_url = 'https://sec.paymentexpress.com/pxpay/pxaccess.aspx'
+        # self.pxpay_url = 'https://uat.paymentexpress.com/pxaccess/pxpay.aspx' # should be the url for testing
         try:
             self.userid = kwargs.get('PXPAY_USERID',
                                      getattr(settings, 'PXPAY_USERID'))
